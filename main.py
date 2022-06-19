@@ -11,137 +11,166 @@ from PIL import Image, ImageTk
 
 class Interface:
     def __init__(self, window):
+
+        # My colour constants
+        BLUE = "#5bc5da"
+        BROWN = "#775b59"
+        GREEN = "#a6d3a0ff"
+        DARK_MAGENTA = "#595959"
+        LIGHT_GRAY = "#eeeeee"
+
+        # The following are variables to set different values and create different lists for my code to access
+        current_dir = Path(__file__).absolute().parent
         self.pages = []
         self.current_page = 0
-
-        current_dir = Path(__file__).absolute().parent
         self.logo = ImageTk.PhotoImage(Image.open(current_dir / "OSC logo.png").resize((800//3, 800//3//4)))
+        self.small_logo = ImageTk.PhotoImage(Image.open(current_dir / "OSC logo.png").resize((800 // 4, 800 // 4 // 4)))
+        self.quantity_of_order = 0
 
         # This is to make a frame for the title/introduction and to add this frame to my list of pages
-        start_frame = Frame(window, highlightbackground="black", highlightthickness=4,
-                            height=450,
-                            width=800)
+        start_frame = Frame(window)
         start_frame.pack()
         self.pages.append(start_frame)
 
         # This is my OSC Logo
-        Label(start_frame, image=self.logo).grid(row=0, column=0, columnspan=2, padx=30, sticky=W)
+        Label(start_frame, image=self.logo).grid(row=0, column=0, pady=(30, 20))
 
         # This is my turquoise background with the Interface title
-        Frame(start_frame, background="#5bc5da",
-              width=800*0.837056505,
-              height=450*0.25,
-              highlightbackground="#595959",
-              highlightthickness=3).grid(row=1, columnspan=4, column=0)
-        Label(start_frame, text="OSC's Cafe Kiosk", font=("Verdana", 32), background="#5bc5da")\
-            .grid(row=1, column=0, columnspan=4)
+        title_frame = Frame(start_frame, bg=BLUE,
+                            width=700,
+                            height=100,
+                            highlightbackground=DARK_MAGENTA,
+                            highlightthickness=3)
+        title_frame.grid(row=1, columnspan=4, column=0)
+        title_frame.pack_propagate(False)
+        Label(title_frame, text="OSC's Cafe Kiosk", font=("Verdana", 32), bg=BLUE).pack(pady=(20, 0))
 
         # This is my brown background with the "proceed" button
-        Frame(start_frame, background="#775b59",
-              width=800*0.837056505,
-              height=450*0.344262295,
-              highlightbackground="#595959",
-              highlightthickness=3).grid(row=2, columnspan=4, column=0)
-        Button(start_frame, text="Proceed", command=self.next_frame).grid(row=2, column=1)
+        proceed_frame = Frame(start_frame, bg=BROWN,
+                              width=700,
+                              height=150,
+                              highlightbackground=DARK_MAGENTA,
+                              highlightthickness=3)
+        proceed_frame.grid(row=2, columnspan=4, column=0)
+        proceed_frame.grid_propagate(False)
+        Button(proceed_frame, text="Proceed", command=self.next_frame).grid(row=0, column=0)
 
         # The following will be my menu page
 
         # This is my menu frame where the users can pick their orders
-        menu_frame = Frame(window, highlightbackground="black", highlightthickness=4)
+        menu_frame = Frame(window)
         self.pages.append(menu_frame)
-        self.small_logo = ImageTk.PhotoImage(Image.open(current_dir / "OSC logo.png").resize((800 // 4, 800 // 4 // 4)))
-
-        # This is my OSC Logo
-        Label(menu_frame, image=self.small_logo).grid(row=0, column=1, columnspan=2)
 
         # This is the GUI title
         Label(menu_frame, text="OSC's Cafe Kiosk", font=("Verdana", 22))\
-            .grid(row=0, column=0, columnspan=2)
+            .grid(row=0, column=0, columnspan=2, pady=20)
+
+        # This is my OSC Logo
+        Label(menu_frame, image=self.small_logo).grid(row=0, column=1, columnspan=2, pady=20)
 
         # This is my page title
         title_frame = Frame(menu_frame,
                             background="#5bc5da",
-                            width=800*0.958,
-                            height=450*0.25,
+                            width=750,
+                            height=75,
                             highlightbackground="#595959",
                             highlightthickness=3)
         title_frame.grid(row=1, column=0, columnspan=3)
-        Label(menu_frame,
+        title_frame.pack_propagate(False)
+        Label(title_frame,
               text="Menu",
               font=("Verdana", 32),
-              background="#5bc5da").grid(row=1, column=0, columnspan=3)
+              background="#5bc5da").pack(pady=(6, 0))
 
         background_frame = Frame(menu_frame,
                                  background="#775b59",
-                                 width=800 * 0.958,
-                                 height=450 * 0.4,
+                                 width=750,
+                                 height=255,
                                  highlightbackground="#595959",
                                  highlightthickness=3)
-        background_frame.grid(row=2, rowspan=2, column=0, columnspan=3, sticky=N)
-        background_frame.grid_propagate(False)
+        background_frame.grid(row=2, column=0, columnspan=3, sticky=N)
         background_frame.pack_propagate(False)
-        Frame(background_frame,
-              background="#eeeeee",
-              width=50,
-              height=50).grid(row=0, column=0)
 
-        Button(background_frame, text="Confirm", command=self.next_frame).grid(row=4, column=1, sticky=SE)
-        Button(background_frame, text="Cancel", command=self.prev_frame).grid(row=4, column=0, sticky=SW)
+        item_frame = Frame(background_frame, width=730, height=235)
+        item_frame.pack(pady=10)
+        item_frame.pack_propagate(False)
+
+        item_no_one = Frame(item_frame,
+                            background=LIGHT_GRAY,
+                            width=100,
+                            height=100)
+        item_no_one.grid(row=0, column=0, sticky=W)
+        item_no_one.pack_propagate(False)
+        Label(item_no_one, text="Hello").pack()
+
+        Label(item_frame, text="Hllo").grid(row=0, column=1)
+
+        item_no_two = Frame(item_frame,
+                            background=LIGHT_GRAY,
+                            width=100,
+                            height=10)
+        item_no_two.grid(row=0, column=2, sticky=E)
+        item_no_two.pack_propagate(False)
+        Label(item_no_two, text="Other Hello").pack()
+
+        Button(menu_frame, text="Confirm", command=self.next_frame).grid(row=4, column=2, sticky=SE)
+        Button(menu_frame, text="Cancel", command=self.prev_frame).grid(row=4, column=0, sticky=SW)
 
         # The following is my order confirmation page
 
-        order_confirmation_frame = Frame(window, highlightbackground="black", highlightthickness=4)
-        self.pages.append(order_confirmation_frame)
-        self.small_logo = ImageTk.PhotoImage(Image.open(current_dir / "OSC logo.png")
-                                             .resize((800 // 4, 800 // 4 // 4)))
-
-        # This is my OSC Logo
-        Label(order_confirmation_frame, image=self.small_logo).grid(row=0, column=1, columnspan=2)
+        # This is my order confirmation frame where the users will confirm their order and can edit what they want to
+        menu_frame = Frame(window)
+        self.pages.append(menu_frame)
 
         # This is the GUI title
-        Label(order_confirmation_frame, text="OSC's Cafe Kiosk", font=("Verdana", 22)) \
-            .grid(row=0, column=0, columnspan=2)
+        Label(menu_frame, text="OSC's Cafe Kiosk", font=("Verdana", 22)) \
+            .grid(row=0, column=0, columnspan=2, pady=20)
+
+        # This is my OSC Logo
+        Label(menu_frame, image=self.small_logo).grid(row=0, column=1, columnspan=2, pady=20)
 
         # This is my page title
-        title_frame = Frame(order_confirmation_frame,
+        title_frame = Frame(menu_frame,
                             background="#5bc5da",
-                            width=800 * 0.958,
-                            height=450 * 0.25,
+                            width=750,
+                            height=75,
                             highlightbackground="#595959",
                             highlightthickness=3)
         title_frame.grid(row=1, column=0, columnspan=3)
-        Label(order_confirmation_frame,
-              text="Order Confirmation | Amount of items: 5",
-              font=("Verdana", 20),
-              background="#5bc5da").grid(row=1, column=0, columnspan=3)
+        title_frame.pack_propagate(False)
+        Label(title_frame,
+              text=f"Order Confirmation | Amount of items: {self.quantity_of_order}",
+              font=("Verdana", 32),
+              background="#5bc5da").pack(pady=(6, 0))
 
-        # This is my brown background
-        background_frame = Frame(order_confirmation_frame,
+        background_frame = Frame(menu_frame,
                                  background="#775b59",
-                                 width=800 * 0.958,
-                                 height=450 * 0.4,
+                                 width=750,
+                                 height=255,
                                  highlightbackground="#595959",
                                  highlightthickness=3)
-        background_frame.grid(row=2, rowspan=2, column=0, columnspan=3, sticky=N)
-        background_frame.grid_propagate(False)
+        background_frame.grid(row=2, column=0, columnspan=3, sticky=N)
         background_frame.pack_propagate(False)
 
-        # This is the frame which will contain all the extra details
-        Frame(background_frame,
-              background="#eeeeee").grid(row=0, column=0)
+        item_frame = Frame(background_frame, width=730, height=235)
+        item_frame.pack(pady=10)
+        item_frame.pack_propagate(False)
 
-        # Don't go past this bad boi
-        for i in range(3):
-            start_frame.grid_columnconfigure(i, minsize=800//3)
-            menu_frame.grid_columnconfigure(i, minsize=800//3)
-            order_confirmation_frame.grid_columnconfigure(i, minsize=800//3)
-            background_frame.grid_columnconfigure(i, minsize=800 * 0.958 * 0.25)
+        item_no_one = Frame(item_frame,
+                            background=LIGHT_GRAY,
+                            width=300,
+                            height=100)
+        item_no_one.grid(row=0, column=0, sticky=W)
+        Label(item_no_one, text="Hello")
 
-        for i in range(4):
-            start_frame.grid_rowconfigure(i, minsize=450//4)
-            menu_frame.grid_rowconfigure(i, minsize=450//4)
-            order_confirmation_frame.grid_rowconfigure(i, minsize=450//4)
-            background_frame.grid_rowconfigure(i, minsize=450 * 0.958 * 0.25)
+        item_no_two = Frame(item_frame,
+                            background=LIGHT_GRAY,
+                            width=300,
+                            height=10)
+        item_no_two.grid(row=0, column=1, sticky=E)
+
+        Button(menu_frame, text="Confirm", command=self.next_frame).grid(row=4, column=2, sticky=SE)
+        Button(menu_frame, text="Menu", command=self.prev_frame).grid(row=4, column=0, sticky=SW)
 
     def update_current_page(self):
         for page in self.pages:
@@ -156,8 +185,14 @@ class Interface:
         self.current_page -= 1
         self.update_current_page()
 
+    def add_order(self):
+        self.quantity_of_order += 1
+
+    def remove_order(self):
+        self.quantity_of_order = 0
+
 
 root = Tk()
-root.geometry("800x450")
+root.geometry("801x452")
 cafe_kiosk = Interface(root)
 root.mainloop()
