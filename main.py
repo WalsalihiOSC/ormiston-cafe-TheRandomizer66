@@ -28,6 +28,22 @@ class Interface:
         self.logo = ImageTk.PhotoImage(Image.open(current_dir / "OSC logo.png").resize((800//3, 800//3//4)))
         self.small_logo = ImageTk.PhotoImage(Image.open(current_dir / "OSC logo.png").resize((800 // 4, 800 // 4 // 4)))
         self.quantity_of_order = 0
+        self.sandwich_chicken_num = 0
+        self.sandwich_pork_num = 0
+        self.sandwich_beef_num = 0
+        self.sandwich_vege_num = 0
+        self.salad_chicken_num = 0
+        self.salad_beef_num = 0
+        self.salad_potato_num = 0
+        self.salad_vege_num = 0
+        self.drink_water_num = 0
+        self.drink_coke_num = 0
+        self.drink_juice_num = 0
+        self.drink_coffee_num = 0
+        self.wrap_chicken_num = 0
+        self.wrap_pork_num = 0
+        self.wrap_beef_num = 0
+        self.wrap_vege_num = 0
 
         # This is to make a frame for the title/introduction and to add this frame to my list of pages
         start_frame = Frame(window)
@@ -55,7 +71,8 @@ class Interface:
                               highlightthickness=3)
         proceed_frame.grid(row=2, columnspan=4, column=0)
         proceed_frame.grid_propagate(False)
-        Button(proceed_frame, text="Proceed", bg=GREEN, command=self.next_frame).grid(row=0, column=0)
+        Button(proceed_frame, text="Proceed", bg=GREEN, command=self.next_frame)\
+            .grid(row=0, column=0, padx=310, pady=50)
 
         # The following will be my menu page
 
@@ -114,44 +131,70 @@ class Interface:
         self.order_categories.grid_rowconfigure(0, minsize=50)
         self.order_categories.grid_propagate(False)
 
-        Button(self.order_categories, text="Sandwiches", command=lambda: self.change_menu(0)).grid(row=0, column=0)
-        Button(self.order_categories, text="Salads").grid(row=0, column=1)
-        Button(self.order_categories, text="Drinks").grid(row=0, column=2)
-        Button(self.order_categories, text="Wraps").grid(row=0, column=3)
-
-        # Sandwich Frame
-        sandwich_frame = Frame(background_frame, width=730, height=235, bg=LIGHT_GRAY)
-        sandwich_frame.grid_propagate(False)
-        sandwich_frame.grid_columnconfigure(0, minsize=730 // 2)
-        sandwich_frame.grid_columnconfigure(1, minsize=730 // 2)
-        self.order_categories = Frame(sandwich_frame,
-                                      background=DARK_MAGENTA,
-                                      width=730,
-                                      height=235//4)
-        self.order_categories.grid(row=0, column=0, columnspan=2, sticky=N)
         Button(self.order_categories, text="Sandwiches", command=lambda: self.change_menu(1)).grid(row=0, column=0)
         Button(self.order_categories, text="Salads", command=lambda: self.change_menu(2)).grid(row=0, column=1)
         Button(self.order_categories, text="Drinks", command=lambda: self.change_menu(3)).grid(row=0, column=2)
         Button(self.order_categories, text="Wraps", command=lambda: self.change_menu(4)).grid(row=0, column=3)
-        Label(sandwich_frame, text='Hullo', bg=RED).grid(row=1, column=0)
+
+        # Sandwich Frame
+        sandwich_frame = Frame(background_frame, width=730, height=235, bg=LIGHT_GRAY)
+        sandwich_frame.grid_propagate(False)
+        for i in range(4):
+            sandwich_frame.grid_columnconfigure(i, minsize=730//4)
+
+        self.order_categories = Frame(sandwich_frame,
+                                      background=DARK_MAGENTA,
+                                      width=730,
+                                      height=235//4)
+        self.order_categories.grid(row=0, column=0, columnspan=4, sticky=N)
+        for i in range(4):
+            self.order_categories.grid_columnconfigure(i, minsize=730//4)
+        self.order_categories.grid_rowconfigure(0, minsize=50)
+        self.order_categories.grid_propagate(False)
+
+        Button(self.order_categories, text="Sandwiches", command=lambda: self.change_menu(1)).grid(row=0, column=0)
+        Button(self.order_categories, text="Salads", command=lambda: self.change_menu(2)).grid(row=0, column=1)
+        Button(self.order_categories, text="Drinks", command=lambda: self.change_menu(3)).grid(row=0, column=2)
+        Button(self.order_categories, text="Wraps", command=lambda: self.change_menu(4)).grid(row=0, column=3)
+        Label(sandwich_frame, text=f"Chicken\n{self.sandwich_chicken_num}\nPrice for 1: $3.00")\
+            .grid(row=1, column=0, sticky=E)
+        Button(sandwich_frame, text="+", command=self.sandwich_chicken_num)\
+            .grid(row=1, column=1, sticky=W, padx=(30, 0))
+        Button(sandwich_frame, text="-", command=self.reduce_order).grid(row=1, column=1, sticky=W)
+
+        Label(sandwich_frame, text=f"Pork\n{self.sandwich_chicken_num}\nPrice for 1: $3.50") \
+            .grid(row=2, column=0, sticky=E)
+        Button(sandwich_frame, text="+", command=self.add_order).grid(row=2, column=1, sticky=W, padx=(30, 0))
+        Button(sandwich_frame, text="-", command=self.reduce_order).grid(row=2, column=1, sticky=W)
+
+        Label(sandwich_frame, text=f"Beef\n{self.sandwich_chicken_num}\nPrice for 1: $3.50") \
+            .grid(row=1, column=2, sticky=E)
+        Button(sandwich_frame, text="+", command=self.add_order).grid(row=1, column=3, sticky=W, padx=(30, 0))
+        Button(sandwich_frame, text="-", command=self.reduce_order).grid(row=1, column=3, sticky=W)
+
+        Label(sandwich_frame, text=f"Vegetarian\n{self.sandwich_chicken_num}\nPrice for 1: $3.00") \
+            .grid(row=2, column=2, sticky=E)
+        Button(sandwich_frame, text="+", command=self.add_order).grid(row=2, column=3, sticky=W, padx=(30, 0))
+        Button(sandwich_frame, text="-", command=self.reduce_order).grid(row=2, column=3, sticky=W)
 
         # Salad Frame
         salads_frame = Frame(background_frame, width=730, height=235, bg=LIGHT_GRAY)
         salads_frame.grid_propagate(False)
         salads_frame.grid_columnconfigure(0, minsize=730 // 2)
         salads_frame.grid_columnconfigure(1, minsize=730 // 2)
-
         self.order_categories = Frame(salads_frame,
                                       background=DARK_MAGENTA,
                                       width=730,
                                       height=235 // 4)
         self.order_categories.grid(row=0, column=0, columnspan=2, sticky=N)
-
+        for i in range(4):
+            self.order_categories.grid_columnconfigure(i, minsize=730//4)
+        self.order_categories.grid_rowconfigure(0, minsize=50)
+        self.order_categories.grid_propagate(False)
         Button(self.order_categories, text="Sandwiches", command=lambda: self.change_menu(1)).grid(row=0, column=0)
         Button(self.order_categories, text="Salads", command=lambda: self.change_menu(2)).grid(row=0, column=1)
         Button(self.order_categories, text="Drinks", command=lambda: self.change_menu(3)).grid(row=0, column=2)
         Button(self.order_categories, text="Wraps", command=lambda: self.change_menu(4)).grid(row=0, column=3)
-
         Label(salads_frame, text="Hopefully", bg=RED).grid(row=1, column=0)
 
         # Drinks Frame
@@ -159,38 +202,40 @@ class Interface:
         drinks_frame.grid_propagate(False)
         drinks_frame.grid_columnconfigure(0, minsize=730 // 2)
         drinks_frame.grid_columnconfigure(1, minsize=730 // 2)
-
         self.order_categories = Frame(drinks_frame,
                                       background=DARK_MAGENTA,
                                       width=730,
                                       height=235 // 4)
         self.order_categories.grid(row=0, column=0, columnspan=2, sticky=N)
-
+        for i in range(4):
+            self.order_categories.grid_columnconfigure(i, minsize=730//4)
+        self.order_categories.grid_rowconfigure(0, minsize=50)
+        self.order_categories.grid_propagate(False)
         Button(self.order_categories, text="Sandwiches", command=lambda: self.change_menu(1)).grid(row=0, column=0)
         Button(self.order_categories, text="Salads", command=lambda: self.change_menu(2)).grid(row=0, column=1)
         Button(self.order_categories, text="Drinks", command=lambda: self.change_menu(3)).grid(row=0, column=2)
         Button(self.order_categories, text="Wraps", command=lambda: self.change_menu(4)).grid(row=0, column=3)
-
         Label(drinks_frame, text="Please", bg=RED).grid(row=1, column=0)
 
         # Wraps Frame
-        wraps_frame = Frame(background_frame, width=730, height=235, bg=RED)
+        wraps_frame = Frame(background_frame, width=730, height=235, bg=LIGHT_GRAY)
         wraps_frame.grid_propagate(False)
         wraps_frame.grid_columnconfigure(0, minsize=730 // 2)
         wraps_frame.grid_columnconfigure(1, minsize=730 // 2)
-
         self.order_categories = Frame(wraps_frame,
                                       background=DARK_MAGENTA,
                                       width=730,
                                       height=235 // 4)
         self.order_categories.grid(row=0, column=0, columnspan=2, sticky=N)
-
+        for i in range(4):
+            self.order_categories.grid_columnconfigure(i, minsize=730//4)
+        self.order_categories.grid_rowconfigure(0, minsize=50)
+        self.order_categories.grid_propagate(False)
         Button(self.order_categories, text="Sandwiches", command=lambda: self.change_menu(1)).grid(row=0, column=0)
         Button(self.order_categories, text="Salads", command=lambda: self.change_menu(2)).grid(row=0, column=1)
         Button(self.order_categories, text="Drinks", command=lambda: self.change_menu(3)).grid(row=0, column=2)
         Button(self.order_categories, text="Wraps", command=lambda: self.change_menu(4)).grid(row=0, column=3)
-
-        Label(wraps_frame, text="I'm gonna cry", bg=RED).grid(row=3, column=3)
+        Label(wraps_frame, text="I'm gonna cry", bg=RED).grid(row=1, column=0)
 
         self.menu_screens = [item_frame, sandwich_frame, salads_frame, drinks_frame, wraps_frame]
 
@@ -272,9 +317,14 @@ class Interface:
         for page in self.menu_screens:
             page.pack_forget()
         self.menu_screens[menu_frame].pack(pady=10)
+        self.order_categories.grid(row=0, column=0, columnspan=2, sticky=N)
 
-    def add_order(self):
-        self.quantity_of_order += 1
+    def add_order(self, var_num):
+        var_num += 1
+
+    def reduce_order(self):
+        self.quantity_of_order -= 1
+        print(self.quantity_of_order)
 
     def remove_order(self):
         self.quantity_of_order = 0
